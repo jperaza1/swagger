@@ -1,0 +1,691 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API STOCK",
+    "description": "DSS LAMBDA API STOCK",
+    "contact": {
+      "email": "joseenrique.peraza@externos-cl.cencosud.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://zwhk6v69rf.execute-api.us-east-1.amazonaws.com/staging"
+    }
+  ],
+  "paths": {
+    "/stock/searchSAP": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Filtrado Proveedores por origen = SAP",
+        "description": "Metodo para obtener el id y nombre de los proveedores filtrando por origin = SAP",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "payload": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "nombre": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stock/searchProvider": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Filtrado Proveedores por origen in BOCBOL y SAP_WAREHOUSE",
+        "description": "Metodo para obtener el id y nombre de los proveedores filtrando por origin in BOCBOL y SAP_WAREHOUSE",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "payload": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "nombre": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stock/searchCodeSAP": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Filtra vista easy_product_reference",
+        "description": "Metodo para obtener el reference_id de la vista easy_product_reference",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "payload": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "reference_id": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stock/search": {
+      "post": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Metodo para filtar y obtener stock",
+        "requestBody": {
+          "description": "Objeto requerido para hacer el filtrado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "payload": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "totalRecord": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "totalPage": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stock/updateAssortmentAttribute": {
+      "post": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Subscripcion y Notificacion de SQS",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-amz-sns-message-type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SubscriptionConfirmation",
+                "Notification"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Optional description in *Markdown*",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssortmentAttributeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status_code": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "success"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status_code": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "object",
+                          "properties": {
+                            "internalCode": {
+                              "type": "integer",
+                              "example": 500
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "request no valido"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stock/supplierDeliveryFrequency": {
+      "post": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Notificar a SQS Queue",
+        "requestBody": {
+          "required": true,
+          "description": "Optional description in *Markdown*",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SupplierDeliveryFrequencyModel"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status_code": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "success"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status_code": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "object",
+                          "properties": {
+                            "internalCode": {
+                              "type": "integer",
+                              "example": 500
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "No hay datos que actualizar"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stock/update": {
+      "post": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Actualizar registros en la tabla easy_stock",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStockModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status_code": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "success"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status_code": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "object",
+                          "properties": {
+                            "internalCode": {
+                              "type": "integer",
+                              "example": 500
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Campos requeridos"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/error/create": {
+      "post": {
+        "tags": [
+          "error"
+        ],
+        "summary": "Crear un registro en la tabla easy_stock_errors",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateErrorModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "internalCode": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "success"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/error/delete": {
+      "post": {
+        "tags": [
+          "error"
+        ],
+        "summary": "Eliminar un registro en la tabla easy_stock_errors",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateErrorModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "internalCode": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "success"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/error/reprocess": {
+      "post": {
+        "tags": [
+          "error"
+        ],
+        "summary": "filtra los errores en la tabla easy_stock_errors y los envia a la VTX SQS para ser reprocesados",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReprocessModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "internalCode": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "success"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchModel": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "object"
+          },
+          "fields": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          }
+        }
+      },
+      "AssortmentAttributeModel": {
+        "type": "object",
+        "required": [
+          "SubscribeUrl",
+          "Message"
+        ],
+        "properties": {
+          "SubscribeUrl": {
+            "type": "string"
+          },
+          "Message": {
+            "type": "object",
+            "required": [
+              "refId",
+              "store",
+              "code"
+            ],
+            "properties": {
+              "refId": {
+                "type": "string"
+              },
+              "store": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "SupplierDeliveryFrequencyModel": {
+        "type": "object",
+        "required": [
+          "providerId"
+        ],
+        "properties": {
+          "providerId": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateStockModel": {
+        "type": "object",
+        "required": [
+          "data",
+          "filters"
+        ],
+        "properties": {
+          "data": {
+            "type": "object"
+          },
+          "filters": {
+            "type": "object"
+          }
+        }
+      },
+      "CreateErrorModel": {
+        "type": "object",
+        "required": [
+          "account",
+          "warehouse",
+          "stock",
+          "stockId",
+          "sku"
+        ],
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "warehouse": {
+            "type": "string"
+          },
+          "stock": {
+            "type": "integer"
+          },
+          "sku": {
+            "type": "integer"
+          },
+          "stockId": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "ReprocessModel": {
+        "required": [
+          "filters"
+        ],
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
